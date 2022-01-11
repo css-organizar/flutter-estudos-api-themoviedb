@@ -1,8 +1,7 @@
 import 'package:desafio_gabriel/application/application_pages.dart';
 import 'package:desafio_gabriel/application/themes/application_themes.dart';
-import 'package:desafio_gabriel/presentation/movies_dashboard/movies_dashboard_view.dart';
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
+import 'package:get/get.dart';
 
 class ApplicationWidget extends StatefulWidget {
   const ApplicationWidget({Key? key}) : super(key: key);
@@ -18,6 +17,9 @@ class _ApplicationWidgetState extends State<ApplicationWidget> {
       theme: ApplicationTheme.lightTheme,
       getPages: ApplicationPager.routes,
       initialRoute: ApplicationPager.initialRoute,
+      navigatorObservers: [
+        Get.find<RouteObserver>(),
+      ],
     );
   }
 }

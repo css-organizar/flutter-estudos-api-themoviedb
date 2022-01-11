@@ -32,8 +32,24 @@ List<Map<String, dynamic>> genreList = [
   },
 ];
 
-class _MoviesDashboardViewState extends State<MoviesDashboardView> {
+class _MoviesDashboardViewState extends State<MoviesDashboardView> with RouteAware {
   MoviesDashboardContoller controller = Get.find<MoviesDashboardContoller>();
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    Get.find<RouteObserver>().subscribe(
+      this,
+      ModalRoute.of(context) as PageRoute,
+    );
+  }
+
+  @override
+  void dispose() {
+    Get.find<RouteObserver>().unsubscribe(this);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -110,6 +126,7 @@ class _MoviesDashboardViewState extends State<MoviesDashboardView> {
                           selected: (controller.selectedGenre == e['code']),
                           onTap: () {
                             controller.setSelectedGenre(e['code']);
+                            controller.listarFilmes(genreId: e['code']);
                           },
                         );
                       },
@@ -118,16 +135,25 @@ class _MoviesDashboardViewState extends State<MoviesDashboardView> {
                 ),
               ),
               Expanded(
-                child: ListView.separated(
-                  shrinkWrap: true,
-                  itemCount: 5,
-                  separatorBuilder: (context, i) {
-                    return SizedBox(
-                      height: 15,
+                child: Obx(
+                  () {
+                    return ListView.separated(
+                      shrinkWrap: true,
+                      controller: _scrollController,
+                      itemCount: controller.listaFilmes.length,
+                      separatorBuilder: (context, i) {
+                        return SizedBox(
+                          height: 15,
+                        );
+                      },
+                      itemBuilder: (context, i) {
+                        return MovieBannerWidget(
+                          title: controller.listaFilmes[i].title!,
+                          genre: controller.substituirListaGeneros(controller.listaFilmes[i].genreIds),
+                          imagePath: controller.listaFilmes[i].posterPath.toString(),
+                        );
+                      },
                     );
-                  },
-                  itemBuilder: (context, i) {
-                    return MovieBannerWidget();
                   },
                 ),
               )

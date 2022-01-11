@@ -2,7 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class MovieBannerWidget extends StatelessWidget {
-  const MovieBannerWidget({Key? key}) : super(key: key);
+  final String title;
+  final String genre;
+  final String imagePath;
+
+  const MovieBannerWidget({
+    Key? key,
+    required this.title,
+    required this.genre,
+    required this.imagePath,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,10 +38,7 @@ class MovieBannerWidget extends StatelessWidget {
                 ],
               ),
             ),
-            child: Image.asset(
-              'assets/capita_marvel.jpeg',
-              fit: BoxFit.cover,
-            ),
+            child: Image.network('https://image.tmdb.org/t/p/w500$imagePath'),
           ),
           Positioned.fill(
             child: Material(
@@ -48,19 +54,19 @@ class MovieBannerWidget extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'CAPITÃ MARVEL',
+                          title,
                           style: GoogleFonts.montserrat(
                             textStyle: TextStyle(
                               color: Colors.white,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w400,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 10),
                           child: Text(
-                            'Ação - AVentura',
+                            genre,
                             style: GoogleFonts.montserrat(
                               textStyle: TextStyle(
                                 color: Colors.white,
